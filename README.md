@@ -70,8 +70,55 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
        ```powershell
       cd C:\hadoop\hadoop-3.3.6
       .\sbin\start-dfs.cmd
-   Laisse les fenêtres NameNode/DataNode ouvertes.
+   Laisse les fenêtres NameNode/DataNode ouvertes
+   .
+   2. **Créer le dossier cible dans HDFS**
+       ```powershell
+       hdfs dfs -mkdir -p /user/kafka/logs
+       hdfs dfs -ls /user/kafka
+       
+   3. **Exécuter le consumer Python**
+       ```powershell
+      cd C:\kafka\my_consumer
+      python consumer_kafka_to_hdfs.py
+   **Toutes les 60 s, il envoie le contenu de temp_logs.txt** vers /user/kafka/logs/logs_machine.txt (en HDFS).
 
+### 3.4 Analyse MapReduce (script unique Python)
+
+   1. **Script  log_mapreduce.py** (après avoir fait un hdfs namenode -format si besoin) :
+      -Contient run_mapper() et run_reducer() dans le même fichier.
+      -Appelé en mode “mapper” ou “reducer” selon l’argument.
+      
+   2. **Lancer le job Hadoop Streaming**
+       ```powershell
+       hadoop jar "C:\hadoop\hadoop-3.3.6\share\hadoop\tools\lib\hadoop-streaming-3.3.6.jar" `
+       -files "log_mapreduce.py" `
+       -mapper "python log_mapreduce.py mapper" `
+       -reducer "python log_mapreduce.py reducer" `
+       -input "/user/kafka/logs/*.txt" `
+       -output "/user/kafka/logs_out"
+      -files log_mapreduce.py : transfère le script Python sur le cluster.
+      -mapper : exécute log_mapreduce.py mapper pour la phase Map.
+      -reducer : exécute log_mapreduce.py reducer pour la phase Reduce.
+
+       
+   3. *Vérifier le résultat :**
+       ```powershell
+      hdfs dfs -ls /user/kafka/logs_out
+      hdfs dfs -cat /user/kafka/logs_out/part-00000
+   **On y trouve par exemple le nombre total de INFO, WARN, ERROR, etc.**
+
+### 4. Conclusion
+
+   **Nous avons mis en place :**
+
+   -Un pipeline où un script Python génère des logs vers Kafka.
+   -Un consumer Python qui lit depuis Kafka et envoie les logs dans HDFS.
+   -Un job MapReduce en un seul fichier Python (via Hadoop Streaming) pour analyser/agréger les données stockées dans HDFS.
+
+**Ce pipeline démontre un flux complet :**
+**Production** (Kafka) **→ Stockage** (HDFS) **→ Analyse** (MapReduce Python).
+   
 
 
 
