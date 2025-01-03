@@ -62,10 +62,15 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
 ### 3.2 Génération de logs (Python → Kafka)
    - **Script** log_generator.py :
       ```powershell
+      .\python consumer.py
+   **Il produit des logs en continu de manière aléatoire sur le topic logs_machine de 4 différent types: [ERROR],[INFO],[WARN] et [DEBUG]**
+
+### 3.3 Verification de l arrivé et réception des logs (Python → Kafka)
+- **Script** log_generator.py :
+      ```powershell
       .\python log_generator.py
-   **Il produit des logs en continu sur le topic logs_machine**
    
-### 3.3 Consommation Kafka vers HDFS (consumer_kafka_to_hdfs.py)
+### 3.4 Consommation Kafka vers HDFS (consumer_kafka_to_hdfs.py)
    1. **Démarrer HDFS** (après avoir fait un hdfs namenode -format si besoin) :
        ```powershell
       cd C:\hadoop\hadoop-3.3.6
@@ -83,7 +88,7 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
       python consumer_kafka_to_hdfs.py
    **Toutes les 60 s, il envoie le contenu de temp_logs.txt** vers /user/kafka/logs/logs_machine.txt (en HDFS).
 
-### 3.4 Analyse MapReduce (script unique Python)
+### 3.5 Analyse MapReduce (script unique Python)
 
    1. **Script  log_mapreduce.py** (après avoir fait un hdfs namenode -format si besoin) :
       -Contient run_mapper() et run_reducer() dans le même fichier.
