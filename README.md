@@ -91,6 +91,7 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
        ```powershell
        hdfs dfs -mkdir -p /user/kafka/logs
        hdfs dfs -ls /user/kafka
+       
    ![image](https://github.com/user-attachments/assets/4f8ad74a-6ffa-4153-b792-269e8e1f91db)
 
    3. **Exécuter le consumer Python**
