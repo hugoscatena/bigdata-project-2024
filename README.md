@@ -68,6 +68,8 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
       .\python consumer.py
    **Il produit des logs en continu de manière aléatoire sur le topic logs_machine de 4 différent types: [ERROR],[INFO],[WARN] et [DEBUG]**
 ![image](https://github.com/user-attachments/assets/77b7b319-029c-481e-93c5-46fcf5261dad)
+![image](https://github.com/user-attachments/assets/83e49396-d203-4f52-ba43-091d6c2dc910)
+
 
 
 ### 3.3 Verification de l arrivé et réception des logs (Python → Kafka)
@@ -88,7 +90,8 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
        ```powershell
        hdfs dfs -mkdir -p /user/kafka/logs
        hdfs dfs -ls /user/kafka
-       
+   ![image](https://github.com/user-attachments/assets/4f8ad74a-6ffa-4153-b792-269e8e1f91db)
+
    3. **Exécuter le consumer Python**
        ```powershell
       cd C:\kafka\my_consumer
