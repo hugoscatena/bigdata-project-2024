@@ -1,50 +1,50 @@
 # bigdata-project-2024 – Pipeline Kafka → HDFS + Analyse MapReduce - Matéo DOMINGUEZ Hugo SCATENA
-Ce **README** décrit pas à pas ce que nous avons réalisé pour :
+This **README** describes step by step what we achieved for:
 
-1. Produire des logs avec un script Python et les envoyer dans Kafka.  
-2. Consommer ces logs depuis Kafka et les stocker dans HDFS.  
-3. Analyser les données stockées dans HDFS via un job MapReduce (en Python avec Hadoop Streaming).
+1. Produce logs with a Python script and send them to Kafka.  
+2. Consume these logs from Kafka and store them in HDFS. 
+3. Analyze the data stored in HDFS via a MapReduce job (in Python with Hadoop Streaming).
 
 ---
 
-## 1. Présentation du projet
+## 1. Presentation of the project
 
-1. **Génération de logs en Python** :  
-   - Un script (`log_generator.py`) génère en continu des logs (niveau, timestamp, etc.) et les publie dans un **topic Kafka** appelé `logs_machine`.
+1. **Log generation in Python** :  
+   - A script (`log_generator.py`) continuously generates logs (level, timestamp, etc.) and publishes them in a **Kafka topic** called `logs_machine`
 
-2. **Consommation Kafka → HDFS** :  
-   - Un autre script Python (`consumer_kafka_to_hdfs.py`) lit en continu les messages du topic Kafka `logs_machine` et, par lots, les envoie vers **HDFS** (fichier `logs_machine.txt` dans `/user/kafka/logs/`).
+2. **Consumtion Kafka → HDFS** :  
+   - Another Python script (`consumer_kafka_to_hdfs.py`) continuously reads messages from the Kafka topic `logs_machine` and, in batches, sends them to **HDFS** (file `logs_machine.txt` in `/user/kafka/ logs/`).
 
 3. **Analyse via MapReduce** :  
-   - Nous avons écrit un script unique Python (`log_mapreduce.py`) qui contient à la fois le **mapper** et le **reducer**.  
-   - Ce script est exécuté avec **Hadoop Streaming** pour compter, par exemple, le nombre d’occurrences de `INFO`, `WARN`, `ERROR`.
+   - We wrote a single Python script (`log_mapreduce.py`) which contains both the **mapper** and the **reducer**.  
+   - This script is run with **Hadoop Streaming** to count, for example, the number of occurrences of `INFO`, `WARN`, `ERROR`.
 
-L’ensemble constitue un pipeline complet pour gérer et analyser des logs :  
-1. **Kafka** reçoit les logs  
-2. Les logs sont stockés dans **HDFS**  
-3. Un job **MapReduce** (en Python) fait l’agrégation/analyse.
-
----
-
-## 2. Modules / Versions utilisées
-
-- **Système d’exploitation** : Windows 10/11  
-- **Java** : JDK 17  
-- **Python** : 3.11  
-- **Kafka** : 3.x (ex. `kafka_2.12-3.9.0`)  
-- **Hadoop** : 3.3.6 (installé dans `C:\hadoop\hadoop-3.3.6`)  
-  - HDFS activé en mode pseudo-distribué  
-  - Binaire de Hadoop Streaming : `C:\hadoop\hadoop-3.3.6\share\hadoop\tools\lib\hadoop-streaming-3.3.6.jar`  
-- **kafka-python** : bibliothèque Python pour produire/consommer dans Kafka  
-- **Hadoop Streaming** : permet d’écrire le mapper/reducer en Python.
+The whole constitutes a complete pipeline for managing and analyzing logs:  
+1. **Kafka** receives the logs  
+2. Logs are stored in **HDFS**  
+3. A **MapReduce** job (in Python) does the aggregation/analysis.
 
 ---
 
-## 3. Commandes à chaque étape
+## 2. Modules / Versions used
 
-### 3.1 Kafka : démarrage et configuration
+- **Operating system**: Windows 10/11  
+- **Java**: JDK 17  
+- **Python**: 3.11  
+- **Kafka**: 3.x (e.g. `kafka_2.12-3.9.0`)  
+- **Hadoop**: 3.3.6 (installed in `C:\hadoop\hadoop-3.3.6`)  
+  - HDFS enabled in pseudo-distributed mode  
+  - Hadoop Streaming binary: `C:\hadoop\hadoop-3.3.6\share\hadoop\tools\lib\hadoop-streaming-3.3.6.jar`  
+- **kafka-python**: Python library to produce/consume in Kafka  
+- **Hadoop Streaming**: allows you to write the mapper/reducer in Python.
 
-1. **Démarrer ZooKeeper et Kafka** (en deux terminaux séparés) :  
+---
+
+## 3. Commands step by step
+
+### 3.1 Kafka : start and configuration
+
+1. **Starting ZooKeeper et Kafka** (en two seperated commands) :  
    ```powershell
    # Terminal 1 - ZooKeeper
    .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
