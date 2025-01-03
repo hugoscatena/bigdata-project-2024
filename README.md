@@ -51,6 +51,7 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
 
    # Terminal 2 - Kafka Broker
    .\bin\windows\kafka-server-start.bat .\config\server.properties
+![image](https://github.com/user-attachments/assets/d14837e0-262c-4321-a176-25a14e3eaebe)
 
    
 2. **Créer le topic Kafka logs_machine (depuis un 3ᵉ terminal) : **
