@@ -63,7 +63,15 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
    - **Script** log_generator.py :
       ```powershell
       .\python log_generator.py
-      **Il produit des logs en continu sur le topic logs_machine**
+   **Il produit des logs en continu sur le topic logs_machine**
+   
+### 3.3 Consommation Kafka vers HDFS (consumer_kafka_to_hdfs.py)
+   1. **Démarrer HDFS** (après avoir fait un hdfs namenode -format si besoin) :
+       ```powershell
+      cd C:\hadoop\hadoop-3.3.6
+      .\sbin\start-dfs.cmd
+   Laisse les fenêtres NameNode/DataNode ouvertes.
+
 
 
 
