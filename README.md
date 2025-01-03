@@ -65,7 +65,7 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
 ### 3.2 Génération de logs (Python → Kafka)
    - **Script** log_generator.py :
       ```powershell
-      .\python consumer.py
+      .\python log_generator.py
    **Il produit des logs en continu de manière aléatoire sur le topic logs_machine de 4 différent types: [ERROR],[INFO],[WARN] et [DEBUG]**
    
 ![image](https://github.com/user-attachments/assets/77b7b319-029c-481e-93c5-46fcf5261dad)
@@ -74,9 +74,9 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
 
 
 ### 3.3 Verification de l arrivé et réception des logs (Python → Kafka)
-- **Script** log_generator.py :
+- **Script** consumer.py :
       ```powershell
-      .\python log_generator.py
+      .\python consumer.py
   ![image](https://github.com/user-attachments/assets/9427350e-9155-4a18-aa87-012c03b88773)
 
    
