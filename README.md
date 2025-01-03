@@ -62,7 +62,8 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
 ### 3.2 Génération de logs (Python → Kafka)
    - **Script** log_generator.py :
       ```powershell
-   .\python log_generator.py
+      .\python log_generator.py
+      **Il produit des logs en continu sur le topic logs_machine**
 
 
 
