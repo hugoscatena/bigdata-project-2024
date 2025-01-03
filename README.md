@@ -53,13 +53,17 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
    .\bin\windows\kafka-server-start.bat .\config\server.properties
 
    
-2. **Créer le topic Kafka logs_machine (depuis un 3ᵉ terminal) : 
+2. **Créer le topic Kafka logs_machine (depuis un 3ᵉ terminal) : **
    ```powershell
    # Terminal 1 - ZooKeeper
    .\bin\windows\kafka-topics.bat --create --topic logs_machine --bootstrap-server localhost:9092 --partitions 3 -- 
    replication-factor 1
    
 ### 3.2 Génération de logs (Python → Kafka)
+   - **Script** log_generator.py :
+      ```powershell
+   .\python log_generator.py
+
 
 
    
