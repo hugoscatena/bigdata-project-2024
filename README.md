@@ -67,6 +67,7 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
       ```powershell
       .\python consumer.py
    **Il produit des logs en continu de manière aléatoire sur le topic logs_machine de 4 différent types: [ERROR],[INFO],[WARN] et [DEBUG]**
+   
 ![image](https://github.com/user-attachments/assets/77b7b319-029c-481e-93c5-46fcf5261dad)
 ![image](https://github.com/user-attachments/assets/83e49396-d203-4f52-ba43-091d6c2dc910)
 
