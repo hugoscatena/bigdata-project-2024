@@ -56,58 +56,58 @@ The whole constitutes a complete pipeline for managing and analyzing logs:
 
 
    
-2. **Créer le topic Kafka logs_machine (depuis un 3ᵉ terminal) : **
+2. **Create the Kafka logs_machine topic (from a 3rd terminal): **
    ```powershell
    # Terminal 1 - ZooKeeper
    .\bin\windows\kafka-topics.bat --create --topic logs_machine --bootstrap-server localhost:9092 --partitions 3 -- 
    replication-factor 1
    
-### 3.2 Génération de logs (Python → Kafka)
+### 3.2 3.2 Log generation (Python → Kafka)
    - **Script** log_generator.py :
       ```powershell
       .\python log_generator.py
-   **Il produit des logs en continu de manière aléatoire sur le topic logs_machine de 4 différent types: [ERROR],[INFO],[WARN] et [DEBUG]**
+   **It produces continuous logs randomly on the logs_machine topic of 4 different types: [ERROR],[INFO],[WARN] et [DEBUG]**
    
 ![image](https://github.com/user-attachments/assets/77b7b319-029c-481e-93c5-46fcf5261dad)
 ![image](https://github.com/user-attachments/assets/83e49396-d203-4f52-ba43-091d6c2dc910)
 
 
 
-### 3.3 Verification de l arrivé et réception des logs (Python → Kafka)
+### 3.3 Verification of arrival and reception of logs (Python → Kafka)
 - **Script** consumer.py :
       ```powershell
       .\python consumer.py
   ![image](https://github.com/user-attachments/assets/9427350e-9155-4a18-aa87-012c03b88773)
 
    
-### 3.4 Consommation Kafka vers HDFS (consumer_kafka_to_hdfs.py)
-   1. **Démarrer HDFS** (après avoir fait un hdfs namenode -format si besoin) :
+### 3.4 Kafka consumption to HDFS (consumer_kafka_to_hdfs.py)
+   1. **start HDFS** (après avoir fait un hdfs namenode -format si besoin) :
        ```powershell
       cd C:\hadoop\hadoop-3.3.6
       .\sbin\start-dfs.cmd
-   Laisse les fenêtres NameNode/DataNode ouvertes
+   let the windows NameNode/DataNode open
    .
-   2. **Créer le dossier cible dans HDFS**
+   2. **Create target folder in HDFS**
        ```powershell
        hdfs dfs -mkdir -p /user/kafka/logs
        hdfs dfs -ls /user/kafka
        
    ![image](https://github.com/user-attachments/assets/4f8ad74a-6ffa-4153-b792-269e8e1f91db)
 
-   3. **Exécuter le consumer Python**
+   3. **Run the Python consumer**
        ```powershell
       cd C:\kafka\my_consumer
       python consumer_kafka_to_hdfs.py
-   **Toutes les 60 s, il envoie le contenu de temp_logs.txt** vers /user/kafka/logs/logs_machine.txt (en HDFS).
+   **Every 60 s it sends the contents of temp_logs.txt** to /user/kafka/logs/logs_machine.txt (en HDFS).
 
 ### 3.5 Analyse MapReduce (script unique Python)
 
-   1. **Script  log_mapreduce.py** (après avoir fait un hdfs namenode -format si besoin) :
-      -Contient run_mapper() et run_reducer() dans le même fichier.
-      -Appelé en mode “mapper” ou “reducer” selon l’argument.
+   1. **Script  log_mapreduce.py** (after making an hdfs namenode -format if necessary) :
+      -Contains run_mapper() and run_reducer() in the same file.
+      -Called in “mapper” or “reducer” mode depending on the argument
      
       
-   2. **Lancer le job Hadoop Streaming**
+   2. **launch the job Hadoop Streaming**
        ```powershell
        hadoop jar "C:\hadoop\hadoop-3.3.6\share\hadoop\tools\lib\hadoop-streaming-3.3.6.jar" `
        -files "log_mapreduce.py" `
@@ -115,16 +115,16 @@ The whole constitutes a complete pipeline for managing and analyzing logs:
        -reducer "python log_mapreduce.py reducer" `
        -input "/user/kafka/logs/*.txt" `
        -output "/user/kafka/logs_out"
-      -files log_mapreduce.py : transfère le script Python sur le cluster.
-      -mapper : exécute log_mapreduce.py mapper pour la phase Map.
-      -reducer : exécute log_mapreduce.py reducer pour la phase Reduce.
+       -files log_mapreduce.py: transfers the Python script to the cluster.
+       -mapper: executes log_mapreduce.py mapper for the Map phase.
+       -reducer: Runs log_mapreduce.py reducer for the Reduce phase.
  ![image](https://github.com/user-attachments/assets/b1aa206a-923c-4f26-9d79-e910c091fc7c)
        
-   3. *Vérifier le résultat :**
+   3. *Verify the result :**
        ```powershell
       hdfs dfs -ls /user/kafka/logs_out
       hdfs dfs -cat /user/kafka/logs_out/part-00000
-   **On y trouve par exemple le nombre total de INFO, WARN, ERROR, etc.**
+   **For example, we find the total number of INFO, WARN, ERROR, etc.**
    ![image](https://github.com/user-attachments/assets/9b2bfc8b-d9d7-4afd-acf4-bd1ff22b0082)
    ![image](https://github.com/user-attachments/assets/460f1a28-fac4-499c-bf89-bc4902a86e92)
 
@@ -132,14 +132,14 @@ The whole constitutes a complete pipeline for managing and analyzing logs:
 
 ### 4. Conclusion
 
-   **Nous avons mis en place :**
+   **We have set up :**
 
-   -Un pipeline où un script Python génère des logs vers Kafka.
-   -Un consumer Python qui lit depuis Kafka et envoie les logs dans HDFS.
-   -Un job MapReduce en un seul fichier Python (via Hadoop Streaming) pour analyser/agréger les données stockées dans HDFS.
+   -A pipeline where a Python script generates logs to Kafka.
+   -A Python consumer that reads from Kafka and sends logs to HDFS.
+   -A MapReduce job in a single Python file (via Hadoop Streaming) to analyze/aggregate data stored in HDFS.
 
-**Ce pipeline démontre un flux complet :**
-**Production** (Kafka) **→ Stockage** (HDFS) **→ Analyse** (MapReduce Python).
+**This pipeline demonstrates complete flow :**
+**Production** (Kafka) **→ Storage** (HDFS) **→ Analysis** (MapReduce Python).
    
 
 
