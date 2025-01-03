@@ -48,10 +48,12 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
    ```powershell
    # Terminal 1 - ZooKeeper
    .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+![image](https://github.com/user-attachments/assets/d14837e0-262c-4321-a176-25a14e3eaebe)
 
    # Terminal 2 - Kafka Broker
    .\bin\windows\kafka-server-start.bat .\config\server.properties
-![image](https://github.com/user-attachments/assets/d14837e0-262c-4321-a176-25a14e3eaebe)
+![image](https://github.com/user-attachments/assets/25d5c5cd-91a8-46a9-bbfd-cf44f01c5387)
+
 
    
 2. **Créer le topic Kafka logs_machine (depuis un 3ᵉ terminal) : **
@@ -65,11 +67,15 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
       ```powershell
       .\python consumer.py
    **Il produit des logs en continu de manière aléatoire sur le topic logs_machine de 4 différent types: [ERROR],[INFO],[WARN] et [DEBUG]**
+![image](https://github.com/user-attachments/assets/77b7b319-029c-481e-93c5-46fcf5261dad)
+
 
 ### 3.3 Verification de l arrivé et réception des logs (Python → Kafka)
 - **Script** log_generator.py :
       ```powershell
       .\python log_generator.py
+  ![image](https://github.com/user-attachments/assets/9427350e-9155-4a18-aa87-012c03b88773)
+
    
 ### 3.4 Consommation Kafka vers HDFS (consumer_kafka_to_hdfs.py)
    1. **Démarrer HDFS** (après avoir fait un hdfs namenode -format si besoin) :
@@ -94,6 +100,7 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
    1. **Script  log_mapreduce.py** (après avoir fait un hdfs namenode -format si besoin) :
       -Contient run_mapper() et run_reducer() dans le même fichier.
       -Appelé en mode “mapper” ou “reducer” selon l’argument.
+     
       
    2. **Lancer le job Hadoop Streaming**
        ```powershell
@@ -106,13 +113,17 @@ L’ensemble constitue un pipeline complet pour gérer et analyser des logs :
       -files log_mapreduce.py : transfère le script Python sur le cluster.
       -mapper : exécute log_mapreduce.py mapper pour la phase Map.
       -reducer : exécute log_mapreduce.py reducer pour la phase Reduce.
-
+ ![image](https://github.com/user-attachments/assets/b1aa206a-923c-4f26-9d79-e910c091fc7c)
        
    3. *Vérifier le résultat :**
        ```powershell
       hdfs dfs -ls /user/kafka/logs_out
       hdfs dfs -cat /user/kafka/logs_out/part-00000
    **On y trouve par exemple le nombre total de INFO, WARN, ERROR, etc.**
+   ![image](https://github.com/user-attachments/assets/9b2bfc8b-d9d7-4afd-acf4-bd1ff22b0082)
+   ![image](https://github.com/user-attachments/assets/460f1a28-fac4-499c-bf89-bc4902a86e92)
+
+
 
 ### 4. Conclusion
 
